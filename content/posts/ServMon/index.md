@@ -1,6 +1,6 @@
 +++
 date = '2025-07-08T12:02:55+01:00'
-draft = true
+draft = false
 title = 'HTB: ServMon'
 categories = ["HackTheBox", "Writeups", "Windows", "Easy", "LFI", "FTP", "NSClient++", "Privilege Escalation", "Password Spraying", "Reverse Shell", "Enumeration", "Nmap"]
 +++
