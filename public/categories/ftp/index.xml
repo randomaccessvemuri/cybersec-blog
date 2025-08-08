@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>FTP on Writeups, Scripts, &amp; Security Stuff</title>
+    <link>http://localhost:1313/categories/ftp/</link>
+    <description>Recent content in FTP on Writeups, Scripts, &amp; Security Stuff</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 08 Jul 2025 12:02:55 +0100</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/ftp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB: ServMon</title>
+      <link>http://localhost:1313/posts/servmon/</link>
+      <pubDate>Tue, 08 Jul 2025 12:02:55 +0100</pubDate>
+      <guid>http://localhost:1313/posts/servmon/</guid>
+      <description>&lt;center&gt;&lt;img src=&#34;https://labs.hackthebox.com/storage/avatars/2bc1a8dc04b09b8ac2db694f25ccf051.png&#34; alt=&#34;Busqueda&#34; width=&#34;100&#34; /&gt;&lt;/center&gt;&#xA;&lt;p&gt;An easy Windows box with multiple enumeration rabbit holes. Features NVMS-1000, FTP, locked SMB, and NSClient++. Foothold gained through FTP-disclosed credentials and NVMS-1000 LFI vulnerability that reveals password lists. Password spraying identifies valid credentials between two users. Local NSClient++ access with exposed passwords enables privilege escalation to root via reverse shell execution.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

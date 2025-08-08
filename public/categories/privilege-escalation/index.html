@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en-us"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<meta charset="utf-8" />
+
+  <title>Privilege Escalation - Writeups, Scripts, &amp; Security Stuff</title>
+
+
+  <meta name="author" content="Tanmay Vemuri"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/categories/privilege-escalation/index.xml" title="Writeups, Scripts, & Security Stuff" />
+<link rel="stylesheet" href="http://localhost:1313/css/latex.css" />
+<link rel="stylesheet" href="http://localhost:1313/css/main.css" />
+<link rel="stylesheet" href="/css/custom.css">
+<script id="MathJax-script" async src="http://localhost:1313/js/tex-mml-chtml.js"></script>
+</head>
+<body class="latex-dark">
+
+
+
+
+
+
+<header>
+  <nav class="navbar">
+  <div class="nav">
+    
+
+    <ul class="nav-links">
+      
+    </ul>
+  </div>
+</nav>
+  <div class="intro-header">
+    <div class="container">
+      <div class="categories-heading">
+        
+          <h1>Privilege Escalation</h1>
+          
+        
+      </div>
+    </div>
+  </div>
+</header>
+<div id="content">
+<div class="container" role="main">
+    <div class="posts-list">
+      
+        
+      
+
+      
+        <article class="post-preview">
+  <a href="http://localhost:1313/posts/servmon/">
+      <h2 class="post-title">HTB: ServMon</h2>
+  </a>
+  <div class="postmeta">
+    <span class="meta-post">
+  <i class="fa fa-calendar-alt"></i>
+  Jul 8, 2025
+  
+    <br><i class="fa fa-folder-open"></i>
+    
+      <a href="http://localhost:1313//categories/hackthebox/">HackTheBox</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/writeups/">Writeups</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/windows/">Windows</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/easy/">Easy</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/lfi/">LFI</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/ftp/">FTP</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/nsclient&#43;&#43;/">NSClient&#43;&#43;</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/privilege-escalation/">Privilege Escalation</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/password-spraying/">Password Spraying</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/reverse-shell/">Reverse Shell</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/enumeration/">Enumeration</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/nmap/">Nmap</a>&nbsp;
+    
+  
+</span>
+  </div>
+  <div class="post-entry">
+    
+      <p><center><img src="https://labs.hackthebox.com/storage/avatars/2bc1a8dc04b09b8ac2db694f25ccf051.png" alt="Busqueda" width="100" /></center>
+<p>An easy Windows box with multiple enumeration rabbit holes. Features NVMS-1000, FTP, locked SMB, and NSClient++. Foothold gained through FTP-disclosed credentials and NVMS-1000 LFI vulnerability that reveals password lists. Password spraying identifies valid credentials between two users. Local NSClient++ access with exposed passwords enables privilege escalation to root via reverse shell execution.</p></p>
+        <a href="http://localhost:1313/posts/servmon/" class="post-read-more">Read More</a>
+    
+  </div>
+</article>
+      
+        <article class="post-preview">
+  <a href="http://localhost:1313/posts/busqueda/">
+      <h2 class="post-title">HTB: Busqueda</h2>
+  </a>
+  <div class="postmeta">
+    <span class="meta-post">
+  <i class="fa fa-calendar-alt"></i>
+  Jul 7, 2025
+  
+    <br><i class="fa fa-folder-open"></i>
+    
+      <a href="http://localhost:1313//categories/hackthebox/">HackTheBox</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/writeups/">Writeups</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/busqueda/">Busque­da</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/linux/">Linux</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/easylevel/">Easy‑level</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/web-app/">Web App</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/python-rce/">Python RCE</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/commandinjection/">Command‑Injection</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/searchor-2.4.0/">Searchor 2.4.0</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/reverseshell/">Reverse‑Shell</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/gitea/">Gitea</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/git-config-creds/">Git config creds</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/ssh-svc-login/">SSH svc login</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/docker-enumeration/">Docker enumeration</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/privilege-escalation/">Privilege Escalation</a>&nbsp;
+    
+      <a href="http://localhost:1313//categories/relative-path-hijack/">Relative Path Hijack</a>&nbsp;
+    
+  
+</span>
+  </div>
+  <div class="post-entry">
+    
+      <p><center><img src="https://labs.hackthebox.com/storage/avatars/a6942ab57b6a79f71240420442027334.png" alt="Busqueda" width="100" /></center>
+<p>A marked easy machine that involves exploiting a python eval statement in Searchor 2.4.0 to gain foothold, finding a gitea server and a .git folder; thus finding cleartext credentials, following which you find some administration scripts. Exploiting said administration scripts leads to root.</p></p>
+        <a href="http://localhost:1313/posts/busqueda/" class="post-read-more">Read More</a>
+    
+  </div>
+</article>
+      
+      </div>
+    
+</div>
+
+        </div><footer>
+  <div class="container">
+    <p class="credits copyright">
+      <p class="credits theme-by">
+        
+        
+        
+        <a href="http://localhost:1313/">Writeups, Scripts, &amp; Security Stuff</a>,
+        
+        &copy;
+        2025
+        <a href="http://localhost:1313/about/">Tanmay Vemuri</a>
+      </p>
+  </div>
+</footer></body>
+</html>
