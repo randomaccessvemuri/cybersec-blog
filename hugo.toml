@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://randomaccessvemuri.github.io/cybersec-blog/'
 languageCode = 'en-us'
 title = 'Writeups, Scripts, & Security Stuff'
 DefaultContentLanguage = "en"

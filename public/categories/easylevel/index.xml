@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Easy‑level on Writeups, Scripts, &amp; Security Stuff</title>
-    <link>http://localhost:1313/categories/easylevel/</link>
+    <link>http://localhost:1313/cybersec-blog/categories/easylevel/</link>
     <description>Recent content in Easy‑level on Writeups, Scripts, &amp; Security Stuff</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 07 Jul 2025 12:02:55 +0100</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/easylevel/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/cybersec-blog/categories/easylevel/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HTB: Busqueda</title>
-      <link>http://localhost:1313/posts/networked/</link>
+      <link>http://localhost:1313/cybersec-blog/posts/networked/</link>
       <pubDate>Mon, 07 Jul 2025 12:02:55 +0100</pubDate>
-      <guid>http://localhost:1313/posts/networked/</guid>
+      <guid>http://localhost:1313/cybersec-blog/posts/networked/</guid>
       <description>&lt;center&gt;&lt;img src=&#34;https://labs.hackthebox.com/storage/avatars/a6942ab57b6a79f71240420442027334.png&#34; alt=&#34;Busqueda&#34; width=&#34;100&#34; /&gt;&lt;/center&gt;&#xA;&lt;p&gt;A marked easy machine that involves exploiting a python eval statement in Searchor 2.4.0 to gain foothold, finding a gitea server and a .git folder; thus finding cleartext credentials, following which you find some administration scripts. Exploiting said administration scripts leads to root.&lt;/p&gt;</description>
     </item>
     <item>
       <title>HTB: Networked</title>
-      <link>http://localhost:1313/posts/busqueda/</link>
+      <link>http://localhost:1313/cybersec-blog/posts/busqueda/</link>
       <pubDate>Mon, 07 Jul 2025 12:02:55 +0100</pubDate>
-      <guid>http://localhost:1313/posts/busqueda/</guid>
+      <guid>http://localhost:1313/cybersec-blog/posts/busqueda/</guid>
       <description>&lt;center&gt;&lt;img src=&#34;https://labs.hackthebox.com/storage/avatars/a6942ab57b6a79f71240420442027334.png&#34; alt=&#34;Busqueda&#34; width=&#34;100&#34; /&gt;&lt;/center&gt;</description>
     </item>
   </channel>
