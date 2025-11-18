@@ -1,7 +1,7 @@
 +++
 date = '2025-07-07T12:02:55+01:00'
-draft = true
-title = 'HTB: Busqueda'
+draft = false
+title = 'HTB: Networked'
 categories = ["HackTheBox", "Writeups",  "Busque­da",
     "Linux",
     "Easy‑level",
