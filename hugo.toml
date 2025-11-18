@@ -4,14 +4,18 @@ title = 'Writeups, Scripts, & Security Stuff'
 DefaultContentLanguage = "en"
 enableInlineShortcodes = true
 footnoteReturnLinkContents = "^"
+enableRobotsTXT = true
+enableGitInfo = true
 
 [pagination]
-  pagerSize = 3
+  pagerSize = 10
 
 [Params.author]
   name = "Tanmay Vemuri"
   abstract = """
-  I'm an offensive security enthusiast, currently pursuing OSCP and Security+, Student at Manipal Institute of Technology, Bangalore, India.
+  Offensive security enthusiast pursuing OSCP and Security+ certifications.
+  Passionate about penetration testing, vulnerability research, and ethical hacking.
+  Student at Manipal Institute of Technology, Bangalore, India.
   """
 
 [taxonomies]
@@ -25,9 +29,14 @@ footnoteReturnLinkContents = "^"
       unsafe = true
   [markup.highlight]
     style = "paraiso-dark"
+    lineNos = true
+    lineNumbersInTable = false
 
 [Params]
   darkmode = true
+  backtotop = true
+  toc = true
+  mainSections = ["posts"]
 
 theme="HugoTeX"
 
@@ -36,3 +45,7 @@ customSCSS = ["scss/custom.scss"]
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
+
+[sitemap]
+  changefreq = 'weekly'
+  priority = 0.5

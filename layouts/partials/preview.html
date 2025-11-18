@@ -1,14 +1,18 @@
 <article class="post-preview">
   <a href="{{ .Permalink }}">
-      <h2 class="post-title">{{ .Title }}</h2>
+    <h2 class="post-title">{{ .Title }}</h2>
   </a>
   <div class="postmeta">
     {{ partial "postmeta.html" . }}
   </div>
   <div class="post-entry">
-    {{ if .Truncated }}
+    {{ if .Summary }}
       <p>{{ .Summary }}</p>
-        <a href="{{ .Permalink }}" class="post-read-more">Read More</a>
+    {{ else }}
+      <p>{{ .Content | plainify | truncate 250 }}</p>
     {{ end }}
+    <a href="{{ .Permalink }}" class="post-read-more">
+      Read Full Writeup →
+    </a>
   </div>
 </article>
