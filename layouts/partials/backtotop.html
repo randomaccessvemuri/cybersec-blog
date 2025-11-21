@@ -1,0 +1,20 @@
+<script>
+// Back to top button functionality
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  var backToTopButton = document.getElementById("backtotopButton");
+  if (backToTopButton) {
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+      backToTopButton.style.display = "block";
+    } else {
+      backToTopButton.style.display = "none";
+    }
+  }
+}
+
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+</script>
