@@ -3,7 +3,7 @@
     <p class="site-footer__brand">{{ .Site.Title }}</p>
     <p class="site-footer__meta">
       Notes by {{ .Site.Params.author }}.
-      Built with Hugo.
+      {{ with .Site.Params.disclosure }}{{ . }}.{{ end }}
     </p>
   </div>
 </footer>

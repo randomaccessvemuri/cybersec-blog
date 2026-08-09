@@ -2,24 +2,24 @@
 <section class="hero">
   <div class="hero__inner">
     <p class="hero__brand reveal" style="--d:0">{{ .Site.Title }}</p>
-    <h1 class="hero__headline reveal" style="--d:1">Lab notes from the boxes that fought back.</h1>
+    <h1 class="hero__headline reveal" style="--d:1">{{ .Site.Params.headline }}</h1>
     <p class="hero__lede reveal" style="--d:2">{{ .Site.Params.tagline }}</p>
     <div class="hero__actions reveal" style="--d:3">
-      <a class="btn btn--primary" href="#writeups">Read writeups</a>
-      {{ with .Site.Params.github }}
-      <a class="btn btn--ghost" href="{{ . }}" rel="noopener noreferrer" target="_blank">GitHub</a>
-      {{ end }}
+      <a class="btn btn--primary" href="#htb">HTB writeups</a>
+      <a class="btn btn--ghost" href="#blog">Technical blogs</a>
     </div>
+    <p class="hero__disclosure reveal" style="--d:4">{{ .Site.Params.disclosure }}</p>
   </div>
 </section>
 
-<section class="writeups" id="writeups">
+<section class="writeups" id="htb">
   <div class="section-head">
-    <h2>Writeups</h2>
+    <p class="eyebrow">Section</p>
+    <h2>HTB Writeups</h2>
     <p>HackTheBox paths, footholds, and privilege escalation notes.</p>
   </div>
   <ul class="writeup-list">
-    {{ range where .Site.RegularPages "Section" "posts" }}
+    {{ range where .Site.RegularPages "Section" "htb" }}
     <li class="writeup-item reveal-row">
       <a class="writeup-item__link" href="{{ .RelPermalink }}">
         <div class="writeup-item__meta">
@@ -38,7 +38,42 @@
         <span class="writeup-item__go" aria-hidden="true">Open →</span>
       </a>
     </li>
+    {{ else }}
+    <li class="empty-state">No writeups yet.</li>
     {{ end }}
   </ul>
+</section>
+
+<section class="writeups" id="blog">
+  <div class="section-head">
+    <p class="eyebrow">Section</p>
+    <h2>Technical Blogs</h2>
+    <p>Longer-form notes, tooling, and research — landing soon.</p>
+  </div>
+  {{ $blogs := where .Site.RegularPages "Section" "blog" }}
+  {{ if $blogs }}
+  <ul class="writeup-list">
+    {{ range $blogs }}
+    <li class="writeup-item reveal-row">
+      <a class="writeup-item__link" href="{{ .RelPermalink }}">
+        <div class="writeup-item__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+        </div>
+        <h3 class="writeup-item__title">{{ .Title }}</h3>
+        {{ $summary := .Summary | plainify | strings.TrimSpace }}
+        {{ if $summary }}
+        <p class="writeup-item__summary">{{ $summary | truncate 180 }}</p>
+        {{ end }}
+        <span class="writeup-item__go" aria-hidden="true">Open →</span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+  {{ else }}
+  <div class="empty-panel reveal-row">
+    <p class="empty-panel__label">Awaiting transmission</p>
+    <p class="empty-panel__copy">Technical blogs will show up here. The writeups above are live in the meantime.</p>
+  </div>
+  {{ end }}
 </section>
 {{ end }}

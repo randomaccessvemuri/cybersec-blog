@@ -1,7 +1,7 @@
 {{ define "main" }}
 <article class="post">
   <header class="post__header">
-    <a class="post__back" href="{{ .Site.Home.RelPermalink }}#writeups">← All writeups</a>
+    <a class="post__back" href="{{ .Site.Home.RelPermalink }}#{{ if eq .Section "blog" }}blog{{ else }}htb{{ end }}">← {{ if eq .Section "blog" }}Technical blogs{{ else }}HTB writeups{{ end }}</a>
     <h1 class="post__title">{{ .Title }}</h1>
     <div class="post__meta">
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>

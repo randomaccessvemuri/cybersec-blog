@@ -1,6 +1,30 @@
 (() => {
+  const root = document.documentElement;
   const header = document.querySelector(".site-header");
   const rows = document.querySelectorAll(".reveal-row");
+  const toggle = document.querySelector("[data-theme-toggle]");
+  const storageKey = "tmajik-theme";
+
+  const setTheme = (theme) => {
+    root.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(storageKey, theme);
+    } catch (_) {}
+    if (toggle) {
+      const next = theme === "dark" ? "light" : "dark";
+      toggle.setAttribute("aria-label", `Switch to ${next} mode`);
+      toggle.setAttribute("title", `Switch to ${next} mode`);
+    }
+  };
+
+  setTheme(root.getAttribute("data-theme") || "dark");
+
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+      setTheme(current === "dark" ? "light" : "dark");
+    });
+  }
 
   const onScroll = () => {
     if (!header) return;

@@ -2,10 +2,15 @@
   <div class="site-header__inner">
     <a class="wordmark" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
     <nav class="site-nav" aria-label="Primary">
-      <a href="{{ .Site.Home.RelPermalink }}#writeups">Writeups</a>
+      <a href="{{ .Site.Home.RelPermalink }}#htb">HTB</a>
+      <a href="{{ .Site.Home.RelPermalink }}#blog">Blogs</a>
       {{ with .Site.Params.github }}
       <a href="{{ . }}" rel="noopener noreferrer" target="_blank">GitHub</a>
       {{ end }}
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" title="Toggle theme">
+        <span class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true">☀</span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true">☾</span>
+      </button>
     </nav>
   </div>
 </header>

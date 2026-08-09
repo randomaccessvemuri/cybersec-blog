@@ -1,6 +1,6 @@
 baseURL = 'https://randomaccessvemuri.github.io/cybersec-blog/'
 languageCode = 'en-us'
-title = 'vemuri'
+title = 'tmajik'
 DefaultContentLanguage = 'en'
 enableRobotsTXT = true
 enableGitInfo = true
@@ -11,10 +11,12 @@ summaryLength = 40
 
 [params]
   author = 'Tanmay Vemuri'
-  tagline = 'Offensive security notes — HTB writeups, enumeration paths, and privilege escalation.'
-  description = 'Cybersecurity writeups and lab notes by Tanmay Vemuri.'
+  headline = 'Notes from the deep end of Caelid'
+  tagline = 'Offensive security notes — HTB writeups, enumeration paths, and deeper technical rabbit holes.'
+  description = 'Cybersecurity writeups and technical notes by Tanmay Vemuri.'
   github = 'https://github.com/randomaccessvemuri'
-  mainSections = ['posts']
+  disclosure = 'Site designed by AI, Notes by a human'
+  mainSections = ['htb', 'blog']
 
 [taxonomies]
   category = 'categories'
@@ -25,7 +27,7 @@ summaryLength = 40
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-    style = 'nord'
+    style = 'monokai'
     lineNos = true
     lineNumbersInTable = false
     noClasses = true
