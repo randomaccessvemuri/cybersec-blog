@@ -2,4 +2,4 @@
 title: Technical Blogs
 ---
 
-Deep-dives, tooling notes, and longer-form writeups — coming soon.
+Longer-form notes on malware development, tooling, and research.

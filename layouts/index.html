@@ -48,7 +48,7 @@
   <div class="section-head">
     <p class="eyebrow">Section</p>
     <h2>Technical Blogs</h2>
-    <p>Longer-form notes, tooling, and research — landing soon.</p>
+    <p>Longer-form notes on malware development, tooling, and research.</p>
   </div>
   {{ $blogs := where .Site.RegularPages "Section" "blog" }}
   {{ if $blogs }}
@@ -58,6 +58,12 @@
       <a class="writeup-item__link" href="{{ .RelPermalink }}">
         <div class="writeup-item__meta">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+          {{ if .Params.wip }}<span class="meta-wip">WIP</span>{{ end }}
+          {{ with .Params.categories }}
+          <span class="writeup-item__tags">
+            {{ range first 3 . }}<span>{{ . }}</span>{{ end }}
+          </span>
+          {{ end }}
         </div>
         <h3 class="writeup-item__title">{{ .Title }}</h3>
         {{ $summary := .Summary | plainify | strings.TrimSpace }}

@@ -2,13 +2,23 @@
 <article class="post">
   <header class="post__header">
     <a class="post__back" href="{{ .Site.Home.RelPermalink }}#{{ if eq .Section "blog" }}blog{{ else }}htb{{ end }}">← {{ if eq .Section "blog" }}Technical blogs{{ else }}HTB writeups{{ end }}</a>
+    {{ if .Params.wip }}
+    <p class="post__wip"><span>WIP</span> Work in progress</p>
+    {{ end }}
     <h1 class="post__title">{{ .Title }}</h1>
     <div class="post__meta">
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
       {{ with .Params.categories }}
       <ul class="post__cats">
         {{ range first 6 . }}
-        <li><a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a></li>
+        <li><a href="{{ printf "categories/%s/" (. | urlize) | relURL }}">{{ . }}</a></li>
+        {{ end }}
+      </ul>
+      {{ end }}
+      {{ with .Params.tags }}
+      <ul class="post__tags">
+        {{ range . }}
+        <li><a href="{{ printf "tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a></li>
         {{ end }}
       </ul>
       {{ end }}
