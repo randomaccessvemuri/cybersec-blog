@@ -4,7 +4,7 @@
   --font-display-deco: "Cinzel Decorative", "Cinzel", serif;
   --font-body: "Source Serif 4", Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --measure: 42rem;
+  --measure: 52rem;
   --rail: min(1120px, calc(100% - 2.5rem));
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -204,15 +204,80 @@ body {
   );
 }
 
-html[data-theme="light"] .atmosphere__orb {
-  mix-blend-mode: multiply;
-  opacity: 0.45;
+/* Dark: scarlet accent orbs */
+html[data-theme="dark"] .atmosphere__orb--scarlet {
+  opacity: 0.62;
   background: radial-gradient(
     circle,
-    rgba(212, 175, 55, 0.55) 0%,
-    rgba(184, 148, 31, 0.28) 40%,
-    transparent 70%
+    rgba(255, 140, 120, 0.45) 0%,
+    rgba(214, 69, 53, 0.32) 38%,
+    rgba(120, 24, 20, 0.12) 62%,
+    transparent 76%
   );
+}
+
+/* Light: red orbs with black centers (default) */
+html[data-theme="light"] .atmosphere__orb {
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  filter: blur(44px);
+  background: radial-gradient(
+    circle,
+    #0a0606 0%,
+    #1a0a0a 18%,
+    #8f1f18 42%,
+    #c83228 62%,
+    rgba(184, 50, 40, 0.35) 78%,
+    transparent 88%
+  );
+}
+
+/* Light: larger golden accent orbs */
+html[data-theme="light"] .atmosphere__orb--gold {
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  filter: blur(52px);
+  background: radial-gradient(
+    circle,
+    rgba(255, 236, 180, 0.7) 0%,
+    rgba(212, 175, 55, 0.45) 32%,
+    rgba(184, 148, 31, 0.22) 58%,
+    transparent 78%
+  );
+}
+
+.atmosphere__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.atmosphere__particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  background: radial-gradient(
+    circle,
+    #fff6c8 0%,
+    #f0d56a 35%,
+    rgba(201, 162, 39, 0.35) 70%,
+    transparent 100%
+  );
+  box-shadow: 0 0 6px rgba(240, 224, 168, 0.55);
+}
+
+html[data-theme="light"] .atmosphere__particle {
+  background: radial-gradient(
+    circle,
+    #ff8a7a 0%,
+    #e04535 40%,
+    rgba(168, 32, 28, 0.45) 75%,
+    transparent 100%
+  );
+  box-shadow: 0 0 6px rgba(214, 69, 53, 0.55);
 }
 
 .atmosphere__grid,
@@ -276,7 +341,8 @@ html[data-theme="light"] .atmosphere__orb {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atmosphere__orb {
+  .atmosphere__orb,
+  .atmosphere__particle {
     display: none;
   }
 
@@ -867,11 +933,11 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 
 @media (min-width: 980px) {
   .post {
-    grid-template-columns: minmax(0, 1fr) 14rem;
+    grid-template-columns: minmax(0, 1fr) 15rem;
     grid-template-areas:
       "header header"
       "body toc";
-    column-gap: 2.5rem;
+    column-gap: 2rem;
   }
 
   .post__header {
@@ -880,6 +946,7 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 
   .post__body {
     grid-area: body;
+    max-width: none;
   }
 
   .toc {
@@ -1012,6 +1079,7 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 
 .post__body {
   max-width: var(--measure);
+  min-width: 0;
 }
 
 /* Prose */
@@ -1056,7 +1124,7 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 
 .prose pre {
   overflow-x: auto;
-  padding: 1rem 1.1rem;
+  padding: 1.05rem 1.2rem;
   margin: 1.25rem 0;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 30%),
@@ -1064,8 +1132,9 @@ html[data-theme="light"] .theme-toggle__icon--sun {
   color: var(--pre-ink);
   border: 1px solid color-mix(in srgb, var(--gold) 22%, var(--line));
   border-radius: 0.75rem;
-  font-size: 0.84rem;
+  font-size: 0.875rem;
   line-height: 1.55;
+  max-width: 100%;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 8px 20px rgba(0, 0, 0, 0.18);
@@ -1081,10 +1150,30 @@ html[data-theme="light"] .theme-toggle__icon--sun {
 .prose .highlight {
   margin: 1.25rem 0;
   overflow-x: auto;
+  max-width: 100%;
+  border-radius: 0.75rem;
 }
 
 .prose .highlight pre {
   margin: 0;
+}
+
+.prose .highlight table {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  border: 0;
+}
+
+.prose .highlight td {
+  border: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+.prose .highlight td:first-child {
+  padding-right: 0.85rem;
+  user-select: none;
 }
 
 .prose img {

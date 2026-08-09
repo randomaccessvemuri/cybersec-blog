@@ -61,23 +61,45 @@
 
     const atmosphere = document.querySelector(".atmosphere");
     const orbsHost = document.querySelector("[data-orbs]");
+    const particlesHost = document.querySelector("[data-particles]");
     const gridGlow = document.querySelector("[data-grid-glow]");
     const cursorGlow = document.querySelector("[data-cursor-glow]");
     if (!atmosphere || !orbsHost) return;
 
     const rand = (min, max) => min + Math.random() * (max - min);
-    const orbCount = window.matchMedia("(max-width: 720px)").matches ? 3 : 5;
+    const mobile = window.matchMedia("(max-width: 720px)").matches;
+    const orbCount = mobile ? 7 : 11;
+    const particleCount = mobile ? 28 : 55;
     const orbs = [];
+    const particles = [];
+
+    const accentSlots = mobile ? 2 : 3;
+    const accentIndexes = new Set();
+    while (accentIndexes.size < accentSlots) {
+      accentIndexes.add(Math.floor(rand(0, orbCount)));
+    }
+
+    const paintAccent = (el) => {
+      el.classList.remove("atmosphere__orb--gold", "atmosphere__orb--scarlet");
+      el.classList.add(
+        root.getAttribute("data-theme") === "light"
+          ? "atmosphere__orb--gold"
+          : "atmosphere__orb--scarlet"
+      );
+    };
 
     for (let i = 0; i < orbCount; i += 1) {
       const el = document.createElement("span");
       el.className = "atmosphere__orb";
-      const size = rand(180, 420);
+      const isAccent = accentIndexes.has(i);
+      if (isAccent) paintAccent(el);
+      const size = isAccent ? rand(280, 620) : rand(90, 460);
       el.style.width = `${size}px`;
       el.style.height = `${size}px`;
       orbsHost.appendChild(el);
       orbs.push({
         el,
+        accent: isAccent,
         x: rand(0, window.innerWidth),
         y: rand(0, window.innerHeight),
         vx: rand(-0.35, 0.35) || 0.2,
@@ -86,6 +108,38 @@
         wobble: rand(0, Math.PI * 2),
         wobbleSpeed: rand(0.004, 0.012),
       });
+    }
+
+    const syncOrbAccents = () => {
+      orbs.forEach((orb) => {
+        if (orb.accent) paintAccent(orb.el);
+      });
+    };
+
+    // Repaint accents when theme flips
+    const themeObserver = new MutationObserver(syncOrbAccents);
+    themeObserver.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+
+    if (particlesHost) {
+      for (let i = 0; i < particleCount; i += 1) {
+        const el = document.createElement("span");
+        el.className = "atmosphere__particle";
+        const size = rand(1.5, 4.5);
+        el.style.width = `${size}px`;
+        el.style.height = `${size}px`;
+        particlesHost.appendChild(el);
+        particles.push({
+          el,
+          x: rand(0, window.innerWidth),
+          y: rand(0, window.innerHeight),
+          vx: rand(-0.12, 0.12),
+          vy: rand(-0.18, -0.02),
+          size,
+          twinkle: rand(0, Math.PI * 2),
+          twinkleSpeed: rand(0.01, 0.03),
+          baseOpacity: rand(0.25, 0.85),
+        });
+      }
     }
 
     let mx = window.innerWidth * 0.5;
@@ -139,7 +193,6 @@
           orb.vy = (orb.vy / speed) * maxSpeed;
         }
 
-        // Occasional random nudge
         if (Math.random() < 0.008) {
           orb.vx += rand(-0.25, 0.25);
           orb.vy += rand(-0.25, 0.25);
@@ -155,6 +208,23 @@
         if (orb.y > h + pad) orb.y = -pad;
 
         orb.el.style.transform = `translate3d(${orb.x - orb.size / 2}px, ${orb.y - orb.size / 2}px, 0)`;
+      });
+
+      particles.forEach((p) => {
+        p.twinkle += p.twinkleSpeed;
+        p.x += p.vx + Math.sin(p.twinkle) * 0.08;
+        p.y += p.vy;
+
+        if (p.y < -8) {
+          p.y = h + 8;
+          p.x = rand(0, w);
+        }
+        if (p.x < -8) p.x = w + 8;
+        if (p.x > w + 8) p.x = -8;
+
+        const opacity = p.baseOpacity * (0.45 + 0.55 * (0.5 + 0.5 * Math.sin(p.twinkle)));
+        p.el.style.opacity = `${opacity}`;
+        p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
       });
 
       raf = requestAnimationFrame(tick);
