@@ -26,7 +26,13 @@
   <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "index.xml" | relURL }}">
 </head>
 <body class="{{ if .IsHome }}is-home{{ else }}is-page{{ end }}">
-  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="atmosphere" aria-hidden="true">
+    <div class="atmosphere__wash"></div>
+    <div class="atmosphere__orbs" data-orbs></div>
+    <div class="atmosphere__grid"></div>
+    <div class="atmosphere__grid-glow" data-grid-glow></div>
+    <div class="atmosphere__cursor" data-cursor-glow></div>
+  </div>
   <a class="skip-link" href="#main">Skip to content</a>
   {{ partial "header.html" . }}
   <main id="main">

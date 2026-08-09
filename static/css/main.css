@@ -162,37 +162,63 @@ body {
 }
 
 .atmosphere {
+  --mx: 50%;
+  --my: 35%;
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  overflow: hidden;
+}
+
+.atmosphere__wash {
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(900px 480px at 18% 12%, var(--atm-gold-1), transparent 62%),
-    radial-gradient(700px 420px at 78% 28%, var(--atm-orchid), transparent 58%),
-    radial-gradient(640px 380px at 52% 68%, var(--atm-gold-2), transparent 60%),
     radial-gradient(1000px 560px at 8% -8%, var(--atm-1), transparent 58%),
     radial-gradient(860px 500px at 92% 4%, var(--atm-2), transparent 55%),
     radial-gradient(720px 460px at 50% 110%, var(--atm-3), transparent 50%),
     linear-gradient(180deg, var(--atm-base-top) 0%, var(--atm-base-mid) 42%, var(--atm-base-bot) 100%);
 }
 
-.atmosphere::before {
-  content: "";
+.atmosphere__orbs {
   position: absolute;
   inset: 0;
-  opacity: 0.7;
-  background:
-    radial-gradient(circle 180px at 22% 18%, rgba(255, 245, 200, 0.14), transparent 70%),
-    radial-gradient(circle 140px at 76% 30%, rgba(255, 200, 120, 0.1), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 30% 20%, rgba(240, 224, 168, 0.07), transparent 70%),
-    radial-gradient(ellipse 50% 35% at 70% 55%, rgba(212, 175, 55, 0.06), transparent 70%);
 }
 
-.atmosphere::after {
-  content: "";
+.atmosphere__orb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  filter: blur(48px);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  will-change: transform;
+  background: radial-gradient(
+    circle,
+    rgba(255, 236, 170, 0.55) 0%,
+    rgba(212, 175, 55, 0.28) 35%,
+    rgba(201, 162, 39, 0.08) 60%,
+    transparent 72%
+  );
+}
+
+html[data-theme="light"] .atmosphere__orb {
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.55) 0%,
+    rgba(184, 148, 31, 0.28) 40%,
+    transparent 70%
+  );
+}
+
+.atmosphere__grid,
+.atmosphere__grid-glow {
   position: absolute;
   inset: 0;
-  opacity: 1;
   background-image:
     linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px),
@@ -200,6 +226,64 @@ body {
     linear-gradient(90deg, var(--grid-cross) 1px, transparent 1px);
   background-size: 48px 48px, 48px 48px, 192px 192px, 192px 192px;
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 78%);
+}
+
+.atmosphere__grid-glow {
+  opacity: 0;
+  background-image:
+    linear-gradient(rgba(240, 224, 168, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 224, 168, 0.28) 1px, transparent 1px),
+    linear-gradient(rgba(255, 236, 180, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 236, 180, 0.16) 1px, transparent 1px);
+  mask-image: radial-gradient(
+    260px circle at var(--mx) var(--my),
+    black 0%,
+    rgba(0, 0, 0, 0.55) 35%,
+    transparent 72%
+  );
+  -webkit-mask-image: radial-gradient(
+    260px circle at var(--mx) var(--my),
+    black 0%,
+    rgba(0, 0, 0, 0.55) 35%,
+    transparent 72%
+  );
+  transition: opacity 0.35s ease;
+  filter: drop-shadow(0 0 6px rgba(240, 224, 168, 0.25));
+}
+
+.is-home .atmosphere__grid-glow.is-on {
+  opacity: 1;
+}
+
+.atmosphere__cursor {
+  position: absolute;
+  width: min(42vw, 480px);
+  height: min(42vw, 480px);
+  left: var(--mx);
+  top: var(--my);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0;
+  background:
+    radial-gradient(circle, rgba(255, 236, 180, 0.18) 0%, rgba(201, 162, 39, 0.08) 38%, transparent 68%);
+  transition: opacity 0.35s ease;
+  filter: blur(2px);
+}
+
+.is-home .atmosphere__cursor.is-on {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmosphere__orb {
+    display: none;
+  }
+
+  .atmosphere__grid-glow,
+  .atmosphere__cursor {
+    display: none;
+  }
 }
 
 .skip-link {
