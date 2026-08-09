@@ -250,10 +250,52 @@ img {
   text-transform: lowercase;
   text-decoration: none;
   color: var(--ink);
-  background: linear-gradient(180deg, var(--gold-pale) 0%, var(--ink) 55%, var(--gold-soft) 140%);
+}
+
+.brand {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.brand__at {
+  display: inline-block;
+  margin-right: 0.02em;
+  background: linear-gradient(
+    165deg,
+    var(--gold-pale) 0%,
+    var(--gold-orchid) 28%,
+    #fff1b8 46%,
+    var(--gold) 58%,
+    var(--accent) 100%
+  );
+  background-size: 140% 140%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--gold) 35%, transparent));
+  animation: brand-gleam 7s ease-in-out infinite;
+}
+
+.hero__brand .brand__at {
+  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--gold) 40%, transparent))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 25%, transparent));
+}
+
+@keyframes brand-gleam {
+  0%,
+  100% {
+    background-position: 0% 40%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand__at {
+    animation: none;
+  }
 }
 
 .site-nav {
@@ -894,6 +936,7 @@ html[data-theme="light"] .theme-toggle__icon--sun {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: lowercase;
+  color: var(--ink);
 }
 
 .site-footer__meta {

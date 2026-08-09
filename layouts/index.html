@@ -1,7 +1,7 @@
 {{ define "main" }}
 <section class="hero">
   <div class="hero__inner">
-    <p class="hero__brand reveal" style="--d:0">{{ .Site.Title }}</p>
+    <p class="hero__brand reveal" style="--d:0">{{ partial "brand.html" . }}</p>
     <h1 class="hero__headline reveal" style="--d:1">{{ .Site.Params.headline }}</h1>
     <p class="hero__lede reveal" style="--d:2">{{ .Site.Params.tagline }}</p>
     <div class="hero__actions reveal" style="--d:3">

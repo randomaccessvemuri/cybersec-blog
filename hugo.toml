@@ -1,6 +1,6 @@
 baseURL = 'https://randomaccessvemuri.github.io/cybersec-blog/'
 languageCode = 'en-us'
-title = 'tmajik'
+title = '@tmajik'
 DefaultContentLanguage = 'en'
 enableRobotsTXT = true
 enableGitInfo = true

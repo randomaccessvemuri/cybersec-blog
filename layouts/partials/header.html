@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="wordmark" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+    <a class="wordmark" href="{{ .Site.Home.RelPermalink }}">{{ partial "brand.html" . }}</a>
     <nav class="site-nav" aria-label="Primary">
       <a href="{{ .Site.Home.RelPermalink }}#htb">HTB</a>
       <a href="{{ .Site.Home.RelPermalink }}#blog">Blogs</a>
