@@ -2,5 +2,11 @@
 date = '{{ .Date }}'
 draft = true
 title = '{{ replace .File.ContentBaseName "-" " " | title }}'
-summary = ""
+categories = []
 +++
+
+Write the summary here.
+
+<!--more-->
+
+## Enumeration

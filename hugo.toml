@@ -1,50 +1,38 @@
 baseURL = 'https://randomaccessvemuri.github.io/cybersec-blog/'
 languageCode = 'en-us'
-title = 'Writeups, Scripts, & Security Stuff'
-DefaultContentLanguage = "en"
-enableInlineShortcodes = true
-footnoteReturnLinkContents = "^"
+title = 'vemuri'
+DefaultContentLanguage = 'en'
 enableRobotsTXT = true
 enableGitInfo = true
+summaryLength = 40
 
 [pagination]
-  pagerSize = 10
+  pagerSize = 12
 
-[Params.author]
-  name = "Tanmay Vemuri"
-  abstract = """
-  Offensive security enthusiast pursuing OSCP and Security+ certifications.
-  Passionate about penetration testing, vulnerability research, and ethical hacking.
-  Student at Manipal Institute of Technology, Bangalore, India.
-  """
+[params]
+  author = 'Tanmay Vemuri'
+  tagline = 'Offensive security notes — HTB writeups, enumeration paths, and privilege escalation.'
+  description = 'Cybersecurity writeups and lab notes by Tanmay Vemuri.'
+  github = 'https://github.com/randomaccessvemuri'
+  mainSections = ['posts']
 
 [taxonomies]
-  category = "categories"
-  tag = "tags"
-  series = "series"
+  category = 'categories'
+  tag = 'tags'
 
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
   [markup.highlight]
-    style = "paraiso-dark"
+    style = 'nord'
     lineNos = true
     lineNumbersInTable = false
+    noClasses = true
 
-[Params]
-  darkmode = true
-  backtotop = true
-  toc = true
-  mainSections = ["posts"]
-
-theme="HugoTeX"
-
-customSCSS = ["scss/custom.scss"]
-
-[caches]
-  [caches.images]
-    dir = ':cacheDir/images'
+[outputs]
+  home = ['HTML', 'RSS']
+  section = ['HTML', 'RSS']
 
 [sitemap]
   changefreq = 'weekly'

@@ -1,32 +1,29 @@
 {{ define "main" }}
-  <div class="container" role="main">
-    <article class="article" class="blog-post">
-      <div class="postmeta">
-        {{ partial "postmeta.html" . }}
-      </div>
-      <br>
-      {{ partial "toc.html" . }}
-
-      {{ if .Params.tags }}
-        <div class="blog-tags">
-          {{ range .Params.tags }}
-          <a href="{{ (urlize (printf "tags/%s/" .)) | absLangURL }}">{{ . }}</a>&nbsp;
-          {{ end }}
-        </div>
+<article class="post">
+  <header class="post__header">
+    <a class="post__back" href="{{ .Site.Home.RelPermalink }}#writeups">← All writeups</a>
+    <h1 class="post__title">{{ .Title }}</h1>
+    <div class="post__meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      {{ with .Params.categories }}
+      <ul class="post__cats">
+        {{ range first 6 . }}
+        <li><a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a></li>
+        {{ end }}
+      </ul>
       {{ end }}
+    </div>
+  </header>
 
-      <!-- Article content -->
-      <div class="article-content">
-        {{ .Content }}
-      </div>
-    </article>
+  {{ if .TableOfContents }}
+  <nav class="toc" aria-label="Table of contents">
+    <p class="toc__label">On this page</p>
+    {{ .TableOfContents }}
+  </nav>
+  {{ end }}
 
-    <!-- Back to top button -->
-    {{ if gt .WordCount 400 }}
-      {{ partial "backtotop.html" . }}
-      <button onclick="topFunction()" id="backtotopButton" style="display: none;">
-        <i class="fa fa-angle-up"></i>
-      </button>
-    {{ end }}
+  <div class="post__body prose">
+    {{ .Content }}
   </div>
+</article>
 {{ end }}

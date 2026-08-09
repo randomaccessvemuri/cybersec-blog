@@ -1,29 +1,27 @@
 {{ define "main" }}
-<div class="container" role="main">
-    <div class="posts-list">
-      {{ if .IsHome }}
-        {{ $pag := .Paginate (where site.RegularPages "Type" "in" site.Params.mainSections) }}
-      {{ else }}
-        {{ $pag := .Paginator.Pages }}
-      {{ end }}
+<section class="page-head">
+  <div class="page-head__inner">
+    <p class="eyebrow">{{ if eq .Kind "taxonomy" }}{{ .Data.Singular | title }}{{ else }}{{ .Title }}{{ end }}</p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Content }}<div class="page-head__lede">{{ . }}</div>{{ end }}
+  </div>
+</section>
 
-      {{ range .Paginator.Pages }}
-        {{ partial "preview.html" . }}
-      {{ end }}
-      </div>
-    {{ if or (.Paginator.HasPrev) (.Paginator.HasNext) }}
-    <ul class="pager">
-      {{ if .Paginator.HasPrev }}
-        <li class="previous">
-          <a href="{{ .Permalink }}page/{{ .Paginator.Prev.PageNumber }}/">&larr; Newer</a>
-        </li>
-      {{ end }}
-      {{ if .Paginator.HasNext }}
-        <li class="next">
-          <a href="{{ .Permalink }}page/{{ .Paginator.Next.PageNumber }}/">Older &rarr;</a>
-        </li>
-      {{ end }}
-    </ul>
-  {{ end }}
-</div>
+<section class="writeups writeups--compact">
+  <ul class="writeup-list">
+    {{ range .Pages }}
+    <li class="writeup-item">
+      <a class="writeup-item__link" href="{{ .RelPermalink }}">
+        <div class="writeup-item__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+        </div>
+        <h3 class="writeup-item__title">{{ .Title }}</h3>
+        {{ with .Summary }}
+        <p class="writeup-item__summary">{{ . | plainify | truncate 160 }}</p>
+        {{ end }}
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+</section>
 {{ end }}

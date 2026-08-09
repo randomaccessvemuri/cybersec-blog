@@ -1,0 +1,44 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="hero__inner">
+    <p class="hero__brand reveal" style="--d:0">{{ .Site.Title }}</p>
+    <h1 class="hero__headline reveal" style="--d:1">Lab notes from the boxes that fought back.</h1>
+    <p class="hero__lede reveal" style="--d:2">{{ .Site.Params.tagline }}</p>
+    <div class="hero__actions reveal" style="--d:3">
+      <a class="btn btn--primary" href="#writeups">Read writeups</a>
+      {{ with .Site.Params.github }}
+      <a class="btn btn--ghost" href="{{ . }}" rel="noopener noreferrer" target="_blank">GitHub</a>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="writeups" id="writeups">
+  <div class="section-head">
+    <h2>Writeups</h2>
+    <p>HackTheBox paths, footholds, and privilege escalation notes.</p>
+  </div>
+  <ul class="writeup-list">
+    {{ range where .Site.RegularPages "Section" "posts" }}
+    <li class="writeup-item reveal-row">
+      <a class="writeup-item__link" href="{{ .RelPermalink }}">
+        <div class="writeup-item__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+          {{ with .Params.categories }}
+          <span class="writeup-item__tags">
+            {{ range first 3 . }}<span>{{ . }}</span>{{ end }}
+          </span>
+          {{ end }}
+        </div>
+        <h3 class="writeup-item__title">{{ .Title }}</h3>
+        {{ $summary := .Summary | plainify | strings.TrimSpace }}
+        {{ if $summary }}
+        <p class="writeup-item__summary">{{ $summary | truncate 180 }}</p>
+        {{ end }}
+        <span class="writeup-item__go" aria-hidden="true">Open →</span>
+      </a>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

@@ -1,21 +1,9 @@
-<footer>
-  <div class="container">
-    <p class="credits copyright">
-      <p class="credits theme-by">
-        {{ if .Site.Params.Legal }}
-        <a href="{{ .Site.BaseURL }}legal/">{{ .Site.Params.Legal }}</a>
-        <br>
-        {{ end }}
-        {{ if .Site.Params.PoweredBy }}
-        Powered By <a href="https://gohugo.io">Hugo</a>&nbsp;/&nbsp;Theme&nbsp;<a href="https://github.com/kaisugi/HugoTeX">HugoTeX</a>
-        <br>
-        {{ end }}
-        {{ if .Site.Title }}
-        <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>,
-        {{ end }}
-        &copy;
-        {{ .Site.Lastmod.Format "2006" }}
-        <a href="{{ .Site.BaseURL }}about/">{{ .Site.Params.Author.name }}</a>
-      </p>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__brand">{{ .Site.Title }}</p>
+    <p class="site-footer__meta">
+      Notes by {{ .Site.Params.author }}.
+      Built with Hugo.
+    </p>
   </div>
 </footer>

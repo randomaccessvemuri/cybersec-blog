@@ -1,42 +1,11 @@
-
-{{ if .IsHome }}
-{{ if .Site.Params.homeTitle }}
-  {{ $.Scratch.Set "title" .Site.Params.homeTitle }}
-{{ else }}
-  {{ $.Scratch.Set "title" .Site.Title }}
-{{ end }}
-{{ else }}
-{{ $.Scratch.Set "title" .Title }}
-{{ end }}
-
-{{ $title := $.Scratch.Get "title" }}
-{{ if $title }}
-<header>
-  {{ partial "nav.html" . }}
-  <div class="intro-header">
-    <div class="container">
-      <div class="{{ .Type }}-heading">
-        {{ if eq .Type "list" }}
-          <h1>{{ if .Data.Singular }}#{{ end }}{{ .Title }}</h1>
-        {{ else }}
-          <h1>{{ with $title }}{{.}}{{ else }}<br/>{{ end }}</h1>
-          {{ if .IsHome }}
-            <p class="author">{{ with .Site.Params.Author.name }}{{.}}{{ else }}<br/>{{ end }}</p>
-
-            {{ if .Site.Params.Author.abstract }}
-              <div class="abstract">
-                <h5>Abstract</h5>
-                <p>
-                  {{ .Site.Params.Author.abstract }}
-                </p>
-              </div>
-            {{ end }}
-          {{ end }}
-        {{ end }}
-      </div>
-    </div>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="wordmark" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="{{ .Site.Home.RelPermalink }}#writeups">Writeups</a>
+      {{ with .Site.Params.github }}
+      <a href="{{ . }}" rel="noopener noreferrer" target="_blank">GitHub</a>
+      {{ end }}
+    </nav>
   </div>
 </header>
-{{ else }}
-<div class="intro-header"></div>
-{{ end }}
