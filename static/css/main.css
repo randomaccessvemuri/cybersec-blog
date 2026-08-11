@@ -219,23 +219,23 @@ html[data-theme="dark"] .atmosphere__orb--scarlet {
 /* Light: red orbs with black centers (default) */
 html[data-theme="light"] .atmosphere__orb {
   mix-blend-mode: multiply;
-  opacity: 0.72;
-  filter: blur(44px);
+  opacity: 0.48;
+  filter: blur(48px);
   background: radial-gradient(
     circle,
-    #0a0606 0%,
-    #1a0a0a 18%,
-    #8f1f18 42%,
-    #c83228 62%,
-    rgba(184, 50, 40, 0.35) 78%,
-    transparent 88%
+    #2a1210 0%,
+    #5a2018 22%,
+    #a82f24 48%,
+    #c83228 68%,
+    rgba(184, 50, 40, 0.28) 82%,
+    transparent 90%
   );
 }
 
 /* Light: larger golden accent orbs */
 html[data-theme="light"] .atmosphere__orb--gold {
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.42;
   filter: blur(52px);
   background: radial-gradient(
     circle,
@@ -580,6 +580,38 @@ html[data-theme="light"] .theme-toggle__icon--sun {
   width: var(--rail);
   margin-inline: auto;
   max-width: 48rem;
+  position: relative;
+  z-index: 1;
+}
+
+html[data-theme="light"] .hero__inner {
+  padding: 1.25rem 1.35rem 1.35rem;
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 244, 0.72) 0%, rgba(255, 248, 242, 0.55) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 18px 40px rgba(42, 18, 16, 0.08);
+  backdrop-filter: blur(10px) saturate(1.05);
+  -webkit-backdrop-filter: blur(10px) saturate(1.05);
+}
+
+html[data-theme="light"] .hero__brand,
+html[data-theme="light"] .hero__headline,
+html[data-theme="light"] .hero__lede,
+html[data-theme="light"] .hero__disclosure {
+  text-shadow:
+    0 1px 0 rgba(255, 252, 248, 0.9),
+    0 0 18px rgba(255, 248, 242, 0.85),
+    0 0 28px rgba(235, 226, 218, 0.7);
+}
+
+html[data-theme="light"] .hero__headline {
+  color: #3a1c18;
+}
+
+html[data-theme="light"] .hero__lede {
+  color: #5a342e;
 }
 
 .hero__brand {
